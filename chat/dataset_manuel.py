@@ -1,4 +1,6 @@
-# chat/dataset_manuel.py 
+
+import re
+
 DATASET_MANUEL = [
         # === SEMIS & CALENDRIER CULTURAL (VERSION COMPLÈTE BURKINA 2025) ===
     "Coton : semis du 15 mai au 15 juillet. Centre/Est/Ouest/Cascades : dès mi-mai. Boucle du Mouhoun et Sud-Ouest : fin mai. Sahel : attendre bonnes pluies début juillet.",
@@ -279,82 +281,122 @@ DATASET_MANUEL = [
     "La terre ne trahit jamais celui qui la respecte.",
     "Qui dort avec les poules se lève avec les coqs… et finit son zaï avant la chaleur !",
     "Le vrai diplôme du paysan ? Un grenier plein et des enfants en bonne santé.",
-    "Y’a pas de mauvais sol, y’a que des paysans qui n’ont pas encore appris le zaï !"
+    "Y’a pas de mauvais sol, y’a que des paysans qui n’ont pas encore appris le zaï !",
+    
+
+
+    # === DISCOURS OFFICIELS & CHIFFRES DU PRÉSIDENT / MINISTRE ===
+    "Le Capitaine Ibrahim Traoré, 5 décembre 2024 : « Nous avons produit plus de 6 millions de tonnes de céréales en 2024-2025. L’objectif 2025-2026 est 7 millions de tonnes. Nous allons y arriver avec ou sans pluie ! »",
+    "Ministre d’État Ismaël Sombié, août 2025 : « Chaque Burkinabè doit produire sa nourriture. Un peuple qui ne se nourrit pas lui-même est un peuple esclave. »",
+    "Le Président a dit : « Le VDP qui cultive est plus utile que celui qui porte seulement le fusil. » → plus de 23 000 VDP agricoles en 2025.",
+    "Offensive agropastorale 2023-2025 prolongée jusqu’en 2027 : 2 000 tracteurs, 800 motopompes, 600 000 tonnes d’engrais subventionnés.",
+    "Discours du 11 décembre 2024 : « Le Burkina n’importera plus un seul grain de riz ni de maïs à partir de 2027. »",
+
+    # === MALADIES & RAVAGEURS – TRAITEMENTS 2025 (les plus demandés) ===
+    "Chenille légionnaire d’automne 2025 : dès que tu vois les premiers trous dans les feuilles de maïs → pulvérise Emacot 50 ou Cypercal 50 (gratuit via la coopérative). Sinon : 5 L d’extrait de neem + 1 kg de savon par hectare.",
+    "Striga (herbe sorcière) : la seule solution qui marche vraiment = planter SR21, ICSV 1049, Nieleni ou Grinkan. Avec zaï + fumier = striga disparaît en 3 ans.",
+    "Jassides et pucerons sur coton : dès le 40e jour après semis → Acetamiprid (Mospilan) ou Imidaclopride. Sinon savon noir + neem toutes les semaines.",
+    "Mildiou du niébé et anthracnose : Ridomil Gold ou Mancozèbe dès les premiers symptômes. 2 traitements espacés de 10 jours.",
+    "Brûlure bactérienne du riz (taches vert-gris) : pulvériser Kocide ou Cupravit (cuivre) 2 fois à 10 jours d’intervalle.",
+    "Mouche blanche sur tomate/oignon : mélange savon noir (1 kg) + neem (5 L) + piment fort (500 g) dans 200 L d’eau → pulvériser tous les 5 jours.",
+    "Mineuse de la tomate : Abamectine ou Bacillus thuringiensis (Delfin) dès que tu vois les galeries blanches.",
+    "Charançons et bruches en stock : sac PICS + 500 g de piment en poudre + 1 kg de feuilles de neem séchées → 100 % efficace 24 mois.",
+    "Criquets signalés à Djibo et Titao en novembre 2025 : préviens immédiatement la DPV → ils viennent avec Decis ou Karate gratuitement.",
+    "Pourriture grise du maïs en stock : sécher à moins de 13 % d’humidité + sac PICS. Si déjà attaqué → phosphine (Phostoxin) 2 tablettes/tonne.",
+
+    # === PROTECTION & RESTAURATION DES SOLS – TECHNIQUES QUI CARTONNENT EN 2025 ===
+    "Zaï classique (20×20×20 cm) + 300 g fumier + micro-dose (2 g NPK + 1 g urée) = 2 500 à 4 000 kg sorgho/ha même à Gorom-Gorom.",
+    "Zaï profond (40 cm) + termitières broyées + fumier = 1 500 kg/ha sur croûte ferrugineuse (témoignage Djibo 2025).",
+    "Cordons pierreux tous les 20 m + demi-lunes + plantation Faidherbia albida = +700 % rendement en 4 ans (projets P2i à Léo).",
+    "Biochar (charbon de paille de riz) : 10 tonnes/ha une seule fois → le sol retient l’eau comme une éponge pendant 10 ans.",
+    "Mucuna ou Stylosanthes après la récolte de coton → enrichit le sol en azote = équivalent 80 kg d’urée gratuit.",
+    "Rotation coton – sorgho – niébé tous les 3 ans → casse le cycle fusariose + striga + restaure l’azote.",
+    "Sous-solage tous les 4 ans à 40 cm de profondeur → les racines du sorgho descendent à 2 m et résistent à la sécheresse.",
+    "Apport de dolomie ou cendre de bois sur sols acides (Est et Cascades) : 500 kg/ha tous les 3 ans → pH remonte et rendement +40 %.",
+    "Plantation de Gliricidia sepium ou Tephrosia en haie vive → azote gratuit + bois de chauffe + fourrage.",
+    "Couverture permanente du sol avec tiges de sorgho/mil + paillage → réduit l’évaporation de 60 % en saison sèche.",
+
+    # === CHIFFRES & SUBVENTIONS 2025 (les plus recherchés) ===
+    "Subvention engrais 2025 : 16 000 FCFA le sac NPK et urée (au lieu de 32 000 FCFA).",
+    "Subvention tracteur 2025 : 50 % pris en charge par l’État → un tracteur 90 CV à 12 millions au lieu de 25 millions.",
+    "Subvention pompe solaire : 70 % pour les jeunes agriculteurs (moins de 35 ans).",
+    "Subvention sacs PICS : 1 500 FCFA au lieu de 3 000 FCFA pour femmes et jeunes.",
+    "Prime assurance agricole subventionnée à 80 % pour les petits producteurs via le projet PACCEM.",
+    "Crédit à 0 % pour les VDP agricoles sur les sites de retour (Djibo, Kongoussi, Titao).",
+
+    # === PROJETS QUI MARCHENT EN 2025 ===
+    "Projet P2RS : 10 000 ha de bas-fonds aménagés en 2025 → 8 tonnes/ha de riz.",
+    "Projet PARIIS : 50 000 ha restaurés avec zaï + cordons pierreux dans le Centre-Nord.",
+    "Projet 2i (Initiative Irrigation) : 5 000 motopompes distribuées gratuitement aux femmes maraîchères.",
+    "Projet Faso Kunu : 1 500 tracteurs neufs + formation pour les jeunes.",
+    "Projet PACCEM : assurance gratuite pour 200 000 petits producteurs en 2025.",
+
+    # === CONSEILS DE VIEUX QUI ONT TOUJOURS RAISON ===
+    "Un vieux de Dori a dit : « Celui qui fait zaï en décembre dort tranquille en juillet. »",
+    "Un vieux de Banfora : « Le moringa dans la cour, c’est la pharmacie + la banque + le restaurant. »",
+    "Un vieux de Léo : « Qui plante Faidherbia aujourd’hui, ses petits-enfants mangeront à l’ombre. »",
+    "Proverbe mossi : « La terre ne ment jamais. Ce que tu lui donnes, elle te le rend au centuple. »",
+    "Proverbe peulh : « Le bon berger connaît chaque bête. Le bon paysan connaît chaque pierre de son champ. »",
+
+    # === ALERTES RÉELLES DÉCEMBRE 2025 ===
+    "Alerte striga très forte à Kongoussi, Tougouri, Boulsa → ne plante surtout pas Kapelga ou local, seulement SR21 ou ICSV.",
+    "Alerte chenille légionnaire détectée à Pensa et Yako → traitement gratuit par la DPV jusqu’au 15 janvier.",
+    "Alerte criquets au Sahel : si tu vois un nuage vert, appelle le 80 00 11 11 immédiatement.",
+    "Alerte pluies tardives dans les Cascades → risque pourriture arachide → récolte urgente dès maintenant.",
+
+  
+    "Mélange 10 kg de sel + 5 kg de savon noir + 200 L d’eau → pulvérisation contre tous les insectes suceurs.",
+    "Planter 10 lignes de niébé tous les 5 ha de sorgho → azote gratuit + revenu en plus.",
+    "Un vieux pneu + fumier + tomate = 50 à 80 kg de tomates par pneu.",
+    "Feuilles de Hyptis spicigera (thé du Faso) dans le sac de niébé = zéro bruche pendant 3 ans.",
+    "Planter du sorgho rouge autour du maïs → les oiseaux attaquent le rouge et laissent le maïs.",
+
+    "Wend na kodô ! Que ta récolte soit aussi lourde que le cœur d’une mère !",
+    "Le champ ne trahit jamais celui qui le travaille avec amour.",
+    "Qui fait zaï aujourd’hui, mange demain. Qui ne fait rien aujourd’hui, pleure demain."
 ]
 
+
 def get_reponse_manuelle(question):
-    q = question.lower()
+    q = question.lower().strip()
     
-    # Normalisation complète (accents + fautes très courantes )
-    replacements = {
-        "é":"e", "è":"e", "ê":"e", "ë":"e", "ç":"c", "ô":"o", "î":"i",
-        "mais":"maïs", "semé":"semer", "sème":"semer", "sème":"semer",
-        "recoter":"recolter", "recolt":"recolter", "reco":"recolter",
-        "chenile":"chenille", "striga":"striga", "strija":"striga",
-        "engret":"engrais", "engret":"engrais", "engrai":"engrais",
-        "variete":"variété", "varietee":"variété", "variétés":"variété"
+    # Nettoyage plus agressif
+    q = re.sub(r'[^\w\s]', ' ', q)  # Supprime ponctuation
+    q = ' '.join(q.split())  # Supprime espaces multiples
+    
+    # Dictionnaire de corrections
+    corrections = {
+        "cotton": "coton", "cotonn": "coton", "pri": "prix", "tarif": "prix",
+        "sol": "sol", "terre": "sol", "protection": "proteger", "protegr": "proteger"
     }
-    for ancien, nouveau in replacements.items():
-        q = q.replace(ancien, nouveau)
-
-    # Liste complète des mots-clés forts (couvre tout le dataset)
-    mots_forts = [
-        # Cultures principales
-        "coton", "maïs", "mais", "mil", "sorgho", "niebe", "haricot", "arachide", "sesame", "riz", "fonio", "soja",
-        "patate", "manioc", "igname", "tomate", "oignon", "chou", "gombo", "piment", "aubergine", "moringa", "carotte",
-        "tournesol", "pastèque", "melon", "courge"," haricot vert","concombre",
-
-        # Calendrier
-        "semer", "planter", "semis", "quand", "periode", "date", "saison", "recolte", "recolter", "quand recolter",
-
-        # Maladies & ravageurs
-        "chenille", "legionnaire", "striga", "herbe sorciere", "fusariose", "bacteriose", "mildiou",
-        "anthracnose", "charancon", "charançon", "bruche", "criquet", "puceron", "mouche", "termites", "rats", "oiseaux",
-
-        # Sols & restauration
-        "sol", "terre", "zai", "demi-lune", "demi lune", "cordon", "pierreux", "compost", "fumier", "degrade",
-        "ferrugineux", "lithosol", "caillou", "caillouteux", "hydromorphe", "noir", "rouge", "argile", "sable", "bas-fond",
-
-        # Régions & villes
-        "ouaga", "ouagadougou", "bobo", "dioulasso", "dori", "gorom", "djibo", "kaya", "fada", "gaoua", "banfora",
-        "koudougou", "leo", "yako", "reo", "sahel", "nord", "est", "centre", "sud-ouest", "cascades",
-
-        # Intrants & prix
-        "prix", "combien", "fcfa", "engrais", "npk", "uree", "urée", "sac", "subvention", "subventionne",
-
-        # Variétés
-        "variete", "variété", "stam", "fk37", "barka", "espoir", "sr21", "sariasso", "nieleni",
-
-        # Stockage
-        "stockage", "stocker", "pics", "grenier", "conservation", "charancon", "bruche", "neem",
-
-        # Crédit & assurance
-        "credit", "pret", "banque", "sofitex", "coris", "ecobank", "assurance", "sunu", "sonar", "uab",
-
-        # Météo
-        "meteo", "temps", "pluie", "secheresse", "secheresse", "harmattan", "alerte", "novembre", "decembre","décembre","janvier","fevrier","février","inondation","irrigation","temperature",
-
-        # Techniques & conseils
-        "billonnage", "buttage", "microdose", "micro-dose", "rotation", "compost", "fumure", "moringa"
-    ]
-
-    mots_question = set(q.split())
     
-    # Recherche ultra-précise
+    for wrong, right in corrections.items():
+        q = q.replace(wrong, right)
+    
+    # Mots-clés prioritaires pour chaque thématique
+    themes = {
+        "prix_coton": ["prix coton", "coton fcfa", "coton prix", "cout coton"],
+        "protection_sol": ["proteger sol", "sol degrade", "restauration sol", "zaï", "cordon pierreux"],
+        "president": ["president", "traore", "discours president", "capitaine"],
+        "varietes": ["variete", "stam", "fk37", "barka", "semence"]
+    }
+    
+    # Vérification directe par thème
+    for theme, keywords in themes.items():
+        if any(keyword in q for keyword in keywords):
+            # Recherche spécifique dans le dataset
+            for texte in DATASET_MANUEL:
+                texte_lower = texte.lower()
+                if any(keyword in texte_lower for keyword in keywords):
+                    return texte
+    
+    # Fallback : recherche par similarité (votre code actuel)
+    mots_question = set(q.split())
     for texte in DATASET_MANUEL:
         mots_texte = set(texte.lower().split())
-        commun = mots_texte.intersection(mots_question)
-
-        # Si au moins 1 mot-fort + 2 mots en commun 
-        if len(mots_question.intersection(mots_forts)) >= 1 and len(commun) >= 2:
+        commun = mots_question.intersection(mots_texte)
+        
+        if len(commun) >= 2:  # Seuil réduit
             return texte
-        # Sinon si très forte similarité (4 mots ou +)
-        if len(commun) >= 4:
-            return texte
-
-    # Dernier filet de sécurité : si rien → on cherche juste 3 mots communs
-    for texte in DATASET_MANUEL:
-        if len(set(q.split()).intersection(set(texte.lower().split()))) >= 3:
-            return texte
-
+    
     return None

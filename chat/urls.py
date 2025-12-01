@@ -6,5 +6,5 @@ urlpatterns = [
     path('', views.chat_view, name='chat'),
     path('chatbot/', views.chatbot_response, name='chatbot_response'),
     # On enlève la ligne weather/ car plus utilisée
-    # path('weather/', views.weather, name='weather'),  ← SUPPRIMÉE
+
 ]

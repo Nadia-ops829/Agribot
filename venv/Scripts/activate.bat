@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=C:\Users\ASUS\Agribot\venv
+set VIRTUAL_ENV=C:\Users\ariel\OneDrive\Desktop\Nouveau dossier (2)\Agribot\venv
 
 if not defined PROMPT set PROMPT=$P$G
 
