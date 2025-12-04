@@ -49,8 +49,8 @@ def alerte_risque(ville="Ouagadougou"):
     if "pluie" in prev.lower() or "orages" in prev.lower():
         return f"🚨 ALERTE à {ville} : Risque d'inondation. Prépare le drainage !"
     if "chaud" in prev.lower() or "sécheresse" in prev.lower():
-        return f"⚠️ ALERTE à {ville} : Risque de sécheresse. Irrigue si possible !"
-    return f"✅ Pas d'alerte majeure à {ville} demain."
+        return f"ALERTE à {ville} : Risque de sécheresse. Irrigue si possible !"
+    return f"Pas d'alerte majeure à {ville} demain."
 
 def get_temperature_ouagadougou():
     """Fonction originale (bonus)."""
