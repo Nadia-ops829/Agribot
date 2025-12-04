@@ -1,10 +1,8 @@
-# chat/urls.py → Version finale propre
 from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.chat_view, name='chat'),
+    path('', views.chat_view, name='chat_view'),
     path('chatbot/', views.chatbot_response, name='chatbot_response'),
-    # On enlève la ligne weather/ car plus utilisée
-
+    # path('chatbot/status/', views.chatbot_status, name='chatbot_status'),
 ]
